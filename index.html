@@ -14,11 +14,15 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        flex-direction: row;
         text-align: center;
         color: #333;
     }
-
+    .columno{
+        flex-direction: column;
+    }
+    .rowo{
+        flex-direction: row;
+    }
     h1 {
         font-size: 3em;
         margin-bottom: 10px;
@@ -54,6 +58,7 @@
 </style>
 </head>
 <body>
+    <div class="columno">
     <h1>
         Welcome to <br> Harish's AI
     </h1>
@@ -62,12 +67,15 @@
     <input type="text" id="nameInput" placeholder="Your Name">
     <button onclick="greetUser()">Say Hello</button>
     <div id="message"></div>
+    </div>
+    <div class="rowo">
     <br><br>
 <button onclick="window.location.href='draggableai.html'">Draggable AI</button>
 <button onclick="window.location.href='seekoaivoiceassistant.html'">Seeko AI Voice Assistant</button>
 <button onclick="window.location.href='aibasecode.html'">AI Base Code</button>
 <button onclick="window.location.href='https://harish040805.github.io/miniharishcreationsairobot/'">Mini Harish Creations AI</button>
 <button onclick="window.location.href='https://harish040805.github.io/unoharishcreationsairobot/'">UNO Harish Creations AI</button>
+    </div>
 <script>
     function greetUser() {
         const name = document.getElementById('nameInput').value.trim();
@@ -79,5 +87,6 @@
 </script>
 </body>
 </html>
+
 
 
