@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seeko AI Bot</title>
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    background-color: #fff; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.robot {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform: scale(1.5);
+}
+.head {
+    background: linear-gradient(135deg, #ffffff, #d6e8f7);
+    width: 150px;
+    height: 100px;
+    border-radius: 25px;
+    border: 2px solid #0077cc;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2px;
+    box-shadow: 0 4px 8px rgba(0, 119, 204, 0.2);
+}
+.eyes {
+    display: flex;
+    justify-content: space-around;
+    width: 80%;
+}
+.eye {
+    width: 35px;
+    height: 35px;
+    background-color: #fff;
+    border-radius: 50%;
+    border: 2px solid #0077cc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+.eye::after {
+    content: '';
+    width: 20px;
+    height: 20px;
+    background-color: #000;
+    border-radius: 50%;
+    position: absolute;
+}
+.mouth {
+    width: 50px;
+    height: 8px;
+    background-color: #a00;
+    margin-top: 8px;
+    border-radius: 4px;
+    transition: height 0.2s ease, background-color 0.2s ease;
+}
+#mouth {
+    width: 50px;
+    height: 6px;
+    background-color: #000;
+    border-radius: 0 0 50px 50px;
+    margin: 20px auto;
+    transition: height 0.1s;
+}
+.open {
+    height: 100px;
+}
+.body {
+    width: 650px;
+    background: linear-gradient(135deg, #c9e3fb, #e6f0fa);
+    border-radius: 30px;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 2px solid #0077cc;
+    box-shadow: 0 6px 15px rgba(0, 119, 204, 0.2);
+}
+.chat-box {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+    margin-bottom: 12px;
+}
+.chat-box textarea {
+    width: 49%;
+    height: 300px;
+    border-radius: 8px;
+    border: 1px solid #0077cc;
+    padding: 10px;
+    font-size: 14px;
+    resize: none;
+    outline: none;
+    background-color: #fff;
+    color: #003366;
+    box-shadow: inset 0 0 8px rgba(0, 119, 204, 0.1);
+}
+.chat-box textarea::placeholder {
+    color: #7aaedb;
+}
+.output-box {
+    width: 49%;
+    background: #fff;
+    border-radius: 10px;
+    height: 300px;
+    padding: 10px 12px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    word-wrap: break-word;
+    border: 1px solid #0077cc;
+    box-shadow: inset 0 0 8px rgba(0, 119, 204, 0.15);
+    font-size: 10px;
+    color: #003366;
+    line-height: 1.4;
+    scrollbar-width: thin;
+    scrollbar-color: #0077cc #f1f1f1;
+}
+.button {
+    width: 65%;
+    text-align: center;
+    background-color: #0077cc;
+    color: #fff;
+    margin-top: 2px;
+    padding: 5px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0, 119, 204, 0.3);
+}
+.button:hover {
+    background-color: #005fa3;
+}
+.output-box::-webkit-scrollbar {
+    width: 6px;
+}
+.output-box::-webkit-scrollbar-track {
+    background: #e6f0fa;
+    border-radius: 8px;
+}
+.output-box::-webkit-scrollbar-thumb {
+    background-color: #0077cc;
+    border-radius: 8px;
+}
+.output-box p {
+    margin: 0;
+    padding: 6px 8px;
+    background-color: #e1f0ff;
+    border-radius: 6px;
+    color: #004c99;
+    font-size: 13px;
+    font-weight: 500;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+p {
+    font-size: 12px;
+    color: #003366;
+}
+.toolboxclassouter{
+	width:300px;
+	height:350px;
+	margin-left:210px;
+	background:#ffffff;
+	display:flex;
+	flex-direction:column;
+	align-items:center;
+	justify-content:flex-start;
+	padding:12px;
+	gap:12px;
+}
+.toolboxclass{
+	width:300px;
+	height:350px;
+	margin-left:10px;
+	background:#ffffff;
+	border:2px solid #0077cc;
+	border-radius:16px;
+	box-shadow:0 6px 15px rgba(0,119,204,0.2);
+	display:flex;
+	flex-direction:column;
+	align-items:center;
+	justify-content:flex-start;
+	padding:12px;
+	gap:12px;
+}
+#toolbox button {
+    width: 100%;
+    padding: 10px 8px;
+    border: none;
+    border-radius: 10px;
+    background: #0077cc;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 119, 204, 0.3);
+    transition: background-color 0.3s, transform 0.2s;
+    margin-bottom: 8px;
+}
+#toolbox button:hover {
+    background-color: #005fa3;
+}
+#speechControls input[type=range] {
+  width: 100%;
+}
+#speechControls button {
+  width: 48%;
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  background: #0077cc;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,119,204,0.3);
+  transition: background-color 0.3s, transform 0.2s;
+}
+#speechControls button:hover {
+  background-color: #005fa3;
+  transform: translateY(-2px);
+}
+@media (max-width: 900px) {
+    .container {
+        flex-direction: column;
+        align-items: center;
+    }
+    .body {
+        width: 90%;
+        padding: 15px;
+    }
+    .chat-box {
+        flex-direction: column;
+        gap: 8px;
+    }
+    .chat-box textarea,
+    .output-box {
+        width: 100%;
+        height: 200px;
+    }
+    .toolboxclassouter {
+        width: 90%;
+        margin-left: 0;
+    }
+    .toolboxclass {
+        width: 100%;
+        margin-left: 0;
+    }
+    .robot {
+        transform: scale(1.3);
+    }
+}
+@media (max-width: 600px) {
+    body {
+        flex-direction: column;
+        height: auto;
+        padding: 20px 0;
+    }
+    .robot {
+        transform: scale(1.1);
+    }
+    .body {
+        padding: 10px;
+    }
+    .chat-box textarea,
+    .output-box {
+        width: 100%;
+        height: 150px;
+    }
+    #toolbox button,
+    #speechControls button {
+        width: 100%;
+        margin-bottom: 6px;
+    }
+}
+#google_translate_element {
+    margin-top: 20px;
+}
+.translate-float {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    z-index: 9999;
+    background: #fff;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    padding: 5px 10px;
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="robot">
+        <div class="head">
+            <div class="eyes">
+                <div class="eye"></div>
+                <div class="eye"></div>
+            </div>
+            <div class="mouth" id="mouth"></div>
+        </div>
+<div class="body">
+    <div class="chat-box">
+        <textarea id="user-input" placeholder="Type your messages here..."></textarea>
+		<div class="output-box" id="result"></div>
+    </div>
+</div>
+	</div>
+<div id="toolboxouter" class="toolboxclassouter">
+        <div class="head">
+            <div class="eyes">
+                <div class="eye"></div>
+                <div class="eye"></div>
+            </div>
+            <div class="mouth" id="mouth"></div>
+        </div>
+<div id="toolbox" class="toolboxclass">
+  <div style="font-size:30px;font-weight:700;color:#004c99;margin-bottom:8px;text-align:center;">Tool Box</div>
+  <button id="toggleBtn" style="width:100%;padding:10px 8px;border:none;border-radius:10px;background:#0077cc;color:#fff;font-weight:600;cursor:pointer;box-shadow:0 4px 8px rgba(0,119,204,0.3);">▶ Play / ⏸Pause</button>
+  <button id="restartBtn" style="width:100%;padding:10px 8px;border:none;border-radius:10px;background:#0077cc;color:#fff;font-weight:600;cursor:pointer;box-shadow:0 4px 8px rgba(0,119,204,0.3);">↺ Restart</button>
+  <input type="range" id="volumeControl" min="0" max="1" step="0.05" value="1">
+  <input type="range" id="speedControl" min="0.5" max="2" step="0.1" value="1">
+  <div style="display:flex;justify-content:space-between;">
+    <button id="backwardBtn"><< 10s</button>
+	&nbsp; &nbsp;
+    <button id="forwardBtn">10s >></button>
+  </div>
+</div>
+</div>	
+</div>
+  <div class="translate-float">
+    <div id="google_translate_element"></div>
+  </div>
+<script src="https://www.google.com/jsapi"></script>
+<script>
+google.load("elements", "1", {packages: "transliteration"});
+</script>
+
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        includedLanguages: 'af,sq,ar,az,bn,bg,zh-CN,zh-TW,cs,da,nl,en,fr,de,el,gu,he,hi,hu,id,it,ja,kn,ko,la,lv,lt,ms,ml,mr,ne,no,pa,fa,pl,pt,ro,ru,si,sk,sl,es,sv,ta,te,th,tr,uk,ur,vi,cy',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+      }, 'google_translate_element');
+    }
+  </script>
+
+  <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<script>
+const toggleBtn = document.getElementById('toggleBtn');
+const restartBtn = document.getElementById('restartBtn');
+const volumeControl = document.getElementById('volumeControl');
+const speedControl = document.getElementById('speedControl');
+const backwardBtn = document.getElementById('backwardBtn');
+const forwardBtn = document.getElementById('forwardBtn');
+const userInput = document.getElementById('user-input');
+const result = document.getElementById('result');
+const mouth = document.getElementById('mouth');
+
+let lastSpokenText = "";
+let speechInstance = null;
+let mouthInterval;
+let isPaused = false;
+let hasSubmitted = false;
+
+const translateAPIKey = "YOUR_GOOGLE_TRANSLATE_API_KEY";
+const AI_API_KEY = "AIzaSyC5ab-HZmvtoTEXMRBMb4-tPpwD2yMVF1A";
+
+const langMap = {
+    "English": { code: "en", speech: "en-US" },
+    "Hindi": { code: "hi", speech: "hi-IN" },
+    "Tamil": { code: "ta", speech: "ta-IN" },
+    "Spanish": { code: "es", speech: "es-ES" },
+    "French": { code: "fr", speech: "fr-FR" },
+    "German": { code: "de", speech: "de-DE" },
+    "Arabic": { code: "ar", speech: "ar-SA" },
+    "Chinese (Simplified)": { code: "zh-CN", speech: "zh-CN" }
+};
+
+function getSelectedLanguageCode() {
+    const combo = document.querySelector('.goog-te-combo');
+    if (combo && combo.value) {
+        const langMap = {
+            'en': 'en-US',
+            'hi': 'hi-IN',
+            'ta': 'ta-IN',
+            'fr': 'fr-FR',
+            'es': 'es-ES',
+            'de': 'de-DE',
+            'zh-CN': 'zh-CN',
+            'ja': 'ja-JP',
+            'ar': 'ar-SA'
+        };
+        return langMap[combo.value] || 'en-US';
+    }
+    return 'en-US'; 
+}
+
+function speakText(text) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = getSelectedLanguageCode();
+    utterance.rate = parseFloat(document.getElementById('speed')?.value || 1);
+    utterance.volume = parseFloat(document.getElementById('volume')?.value || 1);
+
+    const voices = speechSynthesis.getVoices();
+    const voice = voices.find(v => v.lang === utterance.lang);
+    if (voice) utterance.voice = voice;
+
+    speechSynthesis.cancel();
+    speechSynthesis.speak(utterance);
+}
+
+async function translateText(text, targetLang) {
+    if (!text || targetLang === "en") return text; // no need to translate English
+
+    try {
+        const response = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`);
+        const data = await response.json();
+        return data[0].map(item => item[0]).join('');
+    } catch (error) {
+        console.error('Translation failed:', error);
+        return text;
+    }
+}
+
+function getSelectedLanguage() {
+    const combo = document.querySelector('.goog-te-combo');
+    if (combo && combo.value) {
+        const langCodeMap = {
+            en: { code: 'en', speech: 'en-US' },
+            hi: { code: 'hi', speech: 'hi-IN' },
+            ta: { code: 'ta', speech: 'ta-IN' },
+            fr: { code: 'fr', speech: 'fr-FR' },
+            es: { code: 'es', speech: 'es-ES' },
+            de: { code: 'de', speech: 'de-DE' },
+            'zh-CN': { code: 'zh-CN', speech: 'zh-CN' },
+            ja: { code: 'ja', speech: 'ja-JP' },
+            ar: { code: 'ar', speech: 'ar-SA' }
+        };
+        return langCodeMap[combo.value] || { code: 'en', speech: 'en-US' };
+    }
+    return { code: 'en', speech: 'en-US' };
+}
+
+
+async function translateText(text) {
+    const combo = document.querySelector('.goog-te-combo');
+    if (!combo || !combo.value) return text;
+
+    const targetLang = combo.value;
+
+    try {
+        const response = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`);
+        const data = await response.json();
+        return data[0].map(item => item[0]).join('');
+    } catch (error) {
+        console.error('Translation failed:', error);
+        return text;
+    }
+}
+
+let voices = [];
+
+function loadVoices() {
+    voices = speechSynthesis.getVoices();
+}
+
+speechSynthesis.onvoiceschanged = loadVoices;
+
+function speakTranslatedText(text, langCode) {
+    const speech = new SpeechSynthesisUtterance(text);
+    speech.lang = langCode;
+    speech.rate = parseFloat(speedControl.value);
+    speech.pitch = 1;
+    speech.volume = parseFloat(volumeControl.value);
+
+    let voice = voices.find(v => v.lang.toLowerCase() === langCode.toLowerCase());
+
+    if (!voice) {
+        const prefix = langCode.split('-')[0];
+        voice = voices.find(v => v.lang.toLowerCase().startsWith(prefix));
+    }
+
+    if (!voice) {
+        voice = voices.find(v => v.lang.startsWith('en')) || voices[0];
+    }
+
+    speech.voice = voice;
+
+    speech.onstart = () => {
+        clearInterval(mouthInterval);
+        mouthInterval = setInterval(() => {
+            if (!window.speechSynthesis.paused) {
+                const open = Math.random() > 0.5;
+                mouth.style.height = open ? "25px" : "8px";
+                mouth.style.backgroundColor = open ? "#ff3333" : "#a00";
+            }
+        }, 200);
+    };
+
+    speech.onend = () => {
+        clearInterval(mouthInterval);
+        mouth.style.height = "8px";
+        mouth.style.backgroundColor = "#a00";
+        toggleBtn.textContent = "▶ Play";
+        isPaused = false;
+        hasSubmitted = false;
+    };
+
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(speech);
+    speechInstance = speech;
+}
+
+
+window.addEventListener('beforeunload', () => {
+    window.speechSynthesis.cancel();
+});
+
+async function submitAndSpeak() {
+    const val = userInput.value.trim();
+    if (!val) {
+        result.innerHTML = "<p style='color:red;'>Please enter a message</p>";
+        lastSpokenText = "Please enter a message";
+        speakTranslatedText(lastSpokenText, "en-US");
+        return;
+    }
+
+    result.innerHTML = "<p>Loading...</p>";
+    userInput.value = "";
+
+    try {
+        const selectedLang = getSelectedLanguage();
+
+        const inputInEnglish = selectedLang.code === "en" ? val : await translateText(val, "en");
+
+        const response = await fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${AI_API_KEY}`,
+            {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ contents: [{ parts: [{ text: inputInEnglish }] }] })
+            }
+        );
+
+        const data = await response.json();
+        let outputText = data?.candidates?.[0]?.content?.parts?.[0]?.text || "Error: No response from AI";
+
+let translatedOutput = outputText;
+if (selectedLang.code !== "en") {
+    translatedOutput = await translateText(outputText, selectedLang.code);
+}
+
+        result.innerHTML = `<p>${translatedOutput}</p>`;
+        lastSpokenText = translatedOutput;
+
+        speakTranslatedText(translatedOutput, selectedLang.speech);
+
+    } catch (error) {
+        const errorMsg = `Error: ${error.message}`;
+        result.innerHTML = `<p style='color:red;'>${errorMsg}</p>`;
+        lastSpokenText = errorMsg;
+        speakTranslatedText(errorMsg, "en-US");
+    }
+}
+
+function getSelectedLanguage() {
+    const combo = document.querySelector('.goog-te-combo');
+    if (combo && combo.value) {
+        switch (combo.value) {
+            case 'en': return { code: 'en', speech: 'en-US' };
+            case 'hi': return { code: 'hi', speech: 'hi-IN' };
+            case 'ta': return { code: 'ta', speech: 'ta-IN' };
+            case 'fr': return { code: 'fr', speech: 'fr-FR' };
+            case 'es': return { code: 'es', speech: 'es-ES' };
+            case 'de': return { code: 'de', speech: 'de-DE' };
+            case 'zh-CN': return { code: 'zh-CN', speech: 'zh-CN' };
+            case 'ja': return { code: 'ja', speech: 'ja-JP' };
+            case 'ar': return { code: 'ar', speech: 'ar-SA' };
+            default: return { code: 'en', speech: 'en-US' };
+        }
+    }
+    return { code: 'en', speech: 'en-US' }; 
+}
+
+toggleBtn.addEventListener('click', () => {
+    if (!hasSubmitted) {
+        hasSubmitted = true;
+        submitAndSpeak();
+        toggleBtn.textContent = "⏸ Pause";
+    } else if (window.speechSynthesis.speaking) {
+        if (!isPaused) {
+            window.speechSynthesis.pause();
+            clearInterval(mouthInterval);
+            mouth.style.height = "8px";
+            mouth.style.backgroundColor = "#a00";
+            toggleBtn.textContent = "▶ Play";
+            isPaused = true;
+        } else {
+            window.speechSynthesis.resume();
+            mouthInterval = setInterval(() => {
+                if (!window.speechSynthesis.paused) {
+                    const open = Math.random() > 0.5;
+                    mouth.style.height = open ? "25px" : "8px";
+                    mouth.style.backgroundColor = open ? "#ff3333" : "#a00";
+                }
+            }, 200);
+            toggleBtn.textContent = "⏸ Pause";
+            isPaused = false;
+        }
+    } else if (lastSpokenText) {
+        const selectedLang = getSelectedLanguage();
+        speakTranslatedText(lastSpokenText, selectedLang.speech);
+        toggleBtn.textContent = "⏸ Pause";
+        isPaused = false;
+    }
+});
+
+restartBtn.addEventListener('click', () => {
+    if (lastSpokenText) {
+        window.speechSynthesis.cancel();
+        const selectedLang = getSelectedLanguage();
+        speakTranslatedText(lastSpokenText, selectedLang.speech);
+    }
+});
+
+volumeControl.addEventListener('input', () => {
+    if (speechInstance && lastSpokenText) {
+        const selectedLang = getSelectedLanguage();
+        window.speechSynthesis.cancel();
+        speakTranslatedText(lastSpokenText, selectedLang.speech);
+    }
+});
+
+speedControl.addEventListener('input', () => {
+    if (speechInstance && lastSpokenText) {
+        const selectedLang = getSelectedLanguage();
+        window.speechSynthesis.cancel();
+        speakTranslatedText(lastSpokenText, selectedLang.speech);
+    }
+});
+
+backwardBtn.addEventListener('click', () => {
+    if (speechInstance && lastSpokenText) {
+        window.speechSynthesis.cancel();
+        const selectedLang = getSelectedLanguage();
+        const words = lastSpokenText.split(' ');
+        const index = Math.max(0, Math.floor(words.length * 0.1));
+        speakTranslatedText(words.slice(index).join(' '), selectedLang.speech);
+    }
+});
+
+forwardBtn.addEventListener('click', () => {
+    if (speechInstance && lastSpokenText) {
+        window.speechSynthesis.cancel();
+        const selectedLang = getSelectedLanguage();
+        const words = lastSpokenText.split(' ');
+        const index = Math.min(words.length, Math.floor(words.length * 0.9));
+        speakTranslatedText(words.slice(index).join(' '), selectedLang.speech);
+    }
+});
+
+function initTransliteration() {
+    const transliterationControl = new google.elements.transliteration.TransliterationControl({
+        sourceLanguage: 'en',
+        destinationLanguage: ['ta'], 
+        transliterationEnabled: true
+    });
+
+    transliterationControl.makeTransliteratable(['user-input']);
+
+    const combo = document.querySelector('.goog-te-combo');
+    if (combo) {
+        combo.addEventListener('change', () => {
+            let lang = combo.value;
+            let destLang;
+            switch (lang) {
+                case 'ta': destLang = ['ta']; break;
+                case 'hi': destLang = ['hi']; break;
+                case 'en': destLang = ['en']; break;
+                case 'fr': destLang = ['fr']; break;
+                case 'es': destLang = ['es']; break;
+                case 'de': destLang = ['de']; break;
+                case 'ar': destLang = ['ar']; break;
+                case 'zh-CN': destLang = ['zh-CN']; break;
+                default: destLang = ['en']; break;
+            }
+transliterationControl.setLanguagePair(google.elements.transliteration.LanguageCode.ENGLISH, destLang[0]);
+transliterationControl.enableTransliteration(true);
+        });
+    }
+}
+
+google.setOnLoadCallback(initTransliteration);
+
+</script>
+</body>
+</html>
