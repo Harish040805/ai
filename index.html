@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Welcome Page</title>
+<title>Harish's AI</title>
 <style>
     body {
         margin: 0;
@@ -54,20 +54,28 @@
 </style>
 </head>
 <body>
-    <h1>Welcome to AI Assistant</h1>
+    <h1>
+        Welcome to <br> Harish's AI
+    </h1>
+    <h1>Explore the AI Assistants</h1>
     <p>Enter your name to get a greeting:</p>
     <input type="text" id="nameInput" placeholder="Your Name">
     <button onclick="greetUser()">Say Hello</button>
     <div id="message"></div>
-
+<button onclick="window.location.href='draggableai.html'">Draggable AI</button>
+<button onclick="window.location.href='seekoaivoiceassistant.html'">Seeko AI Voice Assistant</button>
+<button onclick="window.location.href='aibasecode.html'">AI Base Code</button>
+<button onclick="window.location.href='index.html'">Mini Harish Creations AI</button>
+<button onclick="window.location.href='index.html'">UNO Harish Creations AI</button>
 <script>
     function greetUser() {
         const name = document.getElementById('nameInput').value.trim();
         const message = name 
-            ? `Hello, ${name}! I'm your AI assistant. How can I help you today? 🤖` 
+            ? `Hello, ${name}! I'm your AI assistant. Please click the below buttons to explore more AI chatbots? 🤖` 
             : "Hello! Please enter your name to get greeted.";
         document.getElementById('message').textContent = message;
     }
 </script>
 </body>
 </html>
+
