@@ -1,28 +1,89 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Chat Demo with Code</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        background: #f0f4f7;
+    }
+    textarea {
+        width: 100%;
+        height: 100px;
+        padding: 10px;
+        font-size: 1em;
+        margin-bottom: 10px;
+    }
+    button {
+        padding: 10px 20px;
+        font-size: 1em;
+        background-color: #6C63FF;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    button:hover {
+        background-color: #574fd6;
+    }
+    #result {
+        margin-top: 20px;
+        background: white;
+        padding: 15px;
+        border-radius: 5px;
+        min-height: 50px;
+    }
+    pre {
+        background: #272822;
+        color: #f8f8f2;
+        padding: 15px;
+        border-radius: 5px;
+        overflow-x: auto;
+        margin-top: 40px;
+    }
+    code {
+        font-family: monospace;
+        white-space: pre-wrap;
+    }
+</style>
 </head>
-    <body>
-        <div class="p-4">
-    <textarea id="user-input" placeholder="Type your message here..."></textarea>
-    <button id="aisubmitbtn">Submit</button>
-    <div id="result"></div>
-<pre>
-<div class="p-4">
+<body>
+
+<h2>Harish's AI Chat Demo</h2>
+
+<!-- Executable AI Chat Interface -->
+<div id="demo">
     <textarea id="user-input" placeholder="Type your message here..."></textarea>
     <button id="aisubmitbtn">Submit</button>
     <div id="result"></div>
 </div>
- <script>
-        const userInput = document.getElementById('user-input');
-        const aisubmitbtn = document.getElementById('aisubmitbtn');
-        const result = document.getElementById('result');
 
-        aisubmitbtn.addEventListener('click', async function () {
-            const val = userInput.value;
+<h3>Code Behind This Demo:</h3>
+<pre><code id="code-display"></code></pre>
 
+<script>
+    // ------------------------
+    // 1. AI Chat Functionality
+    // ------------------------
+    const userInput = document.getElementById('user-input');
+    const aisubmitbtn = document.getElementById('aisubmitbtn');
+    const result = document.getElementById('result');
+
+    aisubmitbtn.addEventListener('click', async function () {
+        const val = userInput.value.trim();
+        if(!val) {
+            result.innerHTML = "<p>Please enter a message.</p>";
+            return;
+        }
+
+        result.innerHTML = "<p>Generating response...</p>";
+
+        try {
             const response = await fetch(
-                "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyC5ab-HZmvtoTEXMRBMb4-tPpwD2yMVF1A",
+                "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=YOUR_API_KEY",
                 {
                     method: "POST",
                     headers: {
@@ -35,48 +96,71 @@
             );
 
             const data = await response.json();
-            console.log(data);
-
             if (data?.candidates?.length) {
                 result.innerHTML = `<p>${data.candidates[0].content.parts[0].text}</p>`;
             } else {
                 result.innerHTML = "<p>Error: No response</p>";
             }
-        });
-    </script>
-</pre>
-</div>
- <script>
-        const userInput = document.getElementById('user-input');
-        const aisubmitbtn = document.getElementById('aisubmitbtn');
-        const result = document.getElementById('result');
+        } catch (error) {
+            console.error(error);
+            result.innerHTML = "<p>Error: Could not fetch response</p>";
+        }
+    });
 
-        aisubmitbtn.addEventListener('click', async function () {
-            const val = userInput.value;
+    // ------------------------
+    // 2. Display the code
+    // ------------------------
+    // Select the code we want to display
+    const codeString = `
+<textarea id="user-input" placeholder="Type your message here..."></textarea>
+<button id="aisubmitbtn">Submit</button>
+<div id="result"></div>
 
-            const response = await fetch(
-                "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyC5ab-HZmvtoTEXMRBMb4-tPpwD2yMVF1A",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: val }] }]
-                    })
-                }
-            );
+<script>
+const userInput = document.getElementById('user-input');
+const aisubmitbtn = document.getElementById('aisubmitbtn');
+const result = document.getElementById('result');
 
-            const data = await response.json();
-            console.log(data);
+aisubmitbtn.addEventListener('click', async function() {
+    const val = userInput.value.trim();
+    if(!val) {
+        result.innerHTML = "<p>Please enter a message.</p>";
+        return;
+    }
 
-            if (data?.candidates?.length) {
-                result.innerHTML = `<p>${data.candidates[0].content.parts[0].text}</p>`;
-            } else {
-                result.innerHTML = "<p>Error: No response</p>";
+    result.innerHTML = "<p>Generating response...</p>";
+
+    try {
+        const response = await fetch(
+            "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=YOUR_API_KEY",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ contents: [{ parts: [{ text: val }] }] })
             }
-        });
+        );
 
-    </script>
-    </body>
+        const data = await response.json();
+        if(data?.candidates?.length) {
+            result.innerHTML = \`<p>\${data.candidates[0].content.parts[0].text}</p>\`;
+        } else {
+            result.innerHTML = "<p>Error: No response</p>";
+        }
+    } catch(error) {
+        console.error(error);
+        result.innerHTML = "<p>Error: Could not fetch response</p>";
+    }
+});
+</script>
+`.trim();
+
+    // Escape HTML characters for display
+    const escapeHTML = (str) => str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+    document.getElementById('code-display').innerHTML = escapeHTML(codeString);
+</script>
+
+</body>
 </html>
