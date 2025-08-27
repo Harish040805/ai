@@ -410,25 +410,6 @@ async function translateText(text, targetLang) {
     }
 }
 
-function getSelectedLanguage() {
-    const combo = document.querySelector('.goog-te-combo');
-    if (combo && combo.value) {
-        const langCodeMap = {
-            en: { code: 'en', speech: 'en-US' },
-            hi: { code: 'hi', speech: 'hi-IN' },
-            ta: { code: 'ta', speech: 'ta-IN' },
-            fr: { code: 'fr', speech: 'fr-FR' },
-            es: { code: 'es', speech: 'es-ES' },
-            de: { code: 'de', speech: 'de-DE' },
-            'zh-CN': { code: 'zh-CN', speech: 'zh-CN' },
-            ja: { code: 'ja', speech: 'ja-JP' },
-            ar: { code: 'ar', speech: 'ar-SA' }
-        };
-        return langCodeMap[combo.value] || { code: 'en', speech: 'en-US' };
-    }
-    return { code: 'en', speech: 'en-US' };
-}
-
 let voices = [];
 
 function loadVoices() {
@@ -538,6 +519,25 @@ if (selectedLang.code !== "en") {
         lastSpokenText = errorMsg;
         speakTranslatedText(errorMsg, "en-US");
     }
+}
+
+function getSelectedLanguage() {
+    const combo = document.querySelector('.goog-te-combo');
+    if (combo && combo.value) {
+        const langCodeMap = {
+            en: { code: 'en', speech: 'en-US' },
+            hi: { code: 'hi', speech: 'hi-IN' },
+            ta: { code: 'ta', speech: 'ta-IN' },
+            fr: { code: 'fr', speech: 'fr-FR' },
+            es: { code: 'es', speech: 'es-ES' },
+            de: { code: 'de', speech: 'de-DE' },
+            'zh-CN': { code: 'zh-CN', speech: 'zh-CN' },
+            ja: { code: 'ja', speech: 'ja-JP' },
+            ar: { code: 'ar', speech: 'ar-SA' }
+        };
+        return langCodeMap[combo.value] || { code: 'en', speech: 'en-US' };
+    }
+    return { code: 'en', speech: 'en-US' };
 }
 
 function getSelectedLanguage() {
@@ -697,5 +697,6 @@ document.getElementById("toolbox").appendChild(clearHistoryBtn);
 </script>
 </body>
 </html>
+
 
 
