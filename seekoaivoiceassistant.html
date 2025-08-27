@@ -374,12 +374,14 @@ const forwardBtn = document.getElementById('forwardBtn');
 const userInput = document.getElementById('user-input');
 const result = document.getElementById('result');
 const mouth = document.getElementById('mouth');
+const conversationKey = "aiConversationHistory";
 
 let lastSpokenText = "";
 let speechInstance = null;
 let mouthInterval;
 let isPaused = false;
 let hasSubmitted = false;
+let conversationHistory = loadConversation();
 
 const translateAPIKey = "YOUR_GOOGLE_TRANSLATE_API_KEY";
 const AI_API_KEY = "AIzaSyC5ab-HZmvtoTEXMRBMb4-tPpwD2yMVF1A";
@@ -481,8 +483,13 @@ let voices = [];
 
 function loadVoices() {
     voices = speechSynthesis.getVoices();
+    if (voices.length === 0) {
+        // Retry if voices aren't loaded yet
+        setTimeout(loadVoices, 100);
+    }
 }
 
+loadVoices(); // Call initially
 speechSynthesis.onvoiceschanged = loadVoices;
 
 function speakTranslatedText(text, langCode) {
@@ -538,18 +545,20 @@ window.addEventListener('beforeunload', () => {
 async function submitAndSpeak() {
     const val = userInput.value.trim();
     if (!val) {
-        result.innerHTML = "<p style='color:red;'>Please enter a message</p>";
-        lastSpokenText = "Please enter a message";
-        speakTranslatedText(lastSpokenText, "en-US");
+        addMessage("System", "Please enter a message");
+        speakTranslatedText("Please enter a message", "en-US");
         return;
     }
 
-    result.innerHTML = "<p>Loading...</p>";
+    addMessage("You", val);
+    saveMessage("You", val);
+    result.scrollTop = result.scrollHeight;
+
     userInput.value = "";
+    result.innerHTML += "<p>AI: Loading...</p>";
 
     try {
         const selectedLang = getSelectedLanguage();
-
         const inputInEnglish = selectedLang.code === "en" ? val : await translateText(val, "en");
 
         const response = await fetch(
@@ -568,15 +577,14 @@ let translatedOutput = outputText;
 if (selectedLang.code !== "en") {
     translatedOutput = await translateText(outputText, selectedLang.code);
 }
-
-        result.innerHTML = `<p>${translatedOutput}</p>`;
+        result.innerHTML = result.innerHTML.replace("<p>AI: Loading...</p>", "");
+		addMessage("AI", translatedOutput);
+        saveMessage("AI", translatedOutput);
         lastSpokenText = translatedOutput;
-
         speakTranslatedText(translatedOutput, selectedLang.speech);
-
     } catch (error) {
         const errorMsg = `Error: ${error.message}`;
-        result.innerHTML = `<p style='color:red;'>${errorMsg}</p>`;
+        addMessage("System", errorMsg);
         lastSpokenText = errorMsg;
         speakTranslatedText(errorMsg, "en-US");
     }
@@ -678,6 +686,23 @@ forwardBtn.addEventListener('click', () => {
     }
 });
 
+function loadConversation() {
+    const history = JSON.parse(localStorage.getItem(conversationKey)) || [];
+    result.innerHTML = "";
+	history.forEach(entry => {
+        const p = document.createElement("p");
+        p.textContent = `${entry.role}: ${entry.message}`;
+        result.appendChild(p);
+    });
+    return history;
+}
+
+function saveMessage(role, message) {
+    const history = JSON.parse(localStorage.getItem(conversationKey)) || [];
+    history.push({ role, message });
+    localStorage.setItem(conversationKey, JSON.stringify(history));
+}
+
 function initTransliteration() {
     const transliterationControl = new google.elements.transliteration.TransliterationControl({
         sourceLanguage: 'en',
@@ -711,6 +736,15 @@ transliterationControl.enableTransliteration(true);
 
 google.setOnLoadCallback(initTransliteration);
 
+const clearHistoryBtn = document.createElement("button");
+clearHistoryBtn.textContent = "🗑 Clear History";
+clearHistoryBtn.style = "width:100%;padding:10px;border:none;border-radius:10px;background:#cc0000;color:#fff;font-weight:600;cursor:pointer;box-shadow:0 4px 8px rgba(204,0,0,0.3);";
+clearHistoryBtn.onclick = () => {
+    localStorage.removeItem(conversationKey);
+    result.innerHTML = "";
+};
+document.getElementById("toolbox").appendChild(clearHistoryBtn);
 </script>
 </body>
 </html>
+
