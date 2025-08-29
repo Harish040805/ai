@@ -374,14 +374,12 @@ const forwardBtn = document.getElementById('forwardBtn');
 const userInput = document.getElementById('user-input');
 const result = document.getElementById('result');
 const mouth = document.getElementById('mouth');
-const userInput = document.getElementById('user-input');
 
 let lastSpokenText = "";
 let speechInstance = null;
 let mouthInterval;
 let isPaused = false;
 let hasSubmitted = false;
-let username = localStorage.getItem('username') || null;
 
 const translateAPIKey = "YOUR_GOOGLE_TRANSLATE_API_KEY";
 const AI_API_KEY = "AIzaSyC5ab-HZmvtoTEXMRBMb4-tPpwD2yMVF1A";
@@ -541,25 +539,18 @@ async function submitAndSpeak() {
     const val = userInput.value.trim();
     if (!val) {
         result.innerHTML = "<p style='color:red;'>Please enter a message</p>";
-        speakTranslatedText("Please enter a message", "en-US");
+        lastSpokenText = "Please enter a message";
+        speakTranslatedText(lastSpokenText, "en-US");
         return;
     }
 
-	if (!username) {
-        username = val;
-        localStorage.setItem('username', username);
-        result.innerHTML = `<p>Nice to meet you, <strong>${username}</strong>! Now you can chat.</p>`;
-        speakTranslatedText(`Nice to meet you, ${username}! Now you can chat.`, "en-US");
-        userInput.value = "";
-        return; // Stop here; wait for next input
-    }
-
+    result.innerHTML = "<p>Loading...</p>";
     userInput.value = "";
-	result.innerHTML = "<p>Loading...</p>";
 
     try {
         const selectedLang = getSelectedLanguage();
-        const inputInEnglish = selectedLang.code === "en" ? `${val}` : await translateText(val, "en");
+
+        const inputInEnglish = selectedLang.code === "en" ? val : await translateText(val, "en");
 
         const response = await fetch(
             `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${AI_API_KEY}`,
@@ -578,12 +569,15 @@ if (selectedLang.code !== "en") {
     translatedOutput = await translateText(outputText, selectedLang.code);
 }
 
-result.innerHTML = `<p><strong>${username}:</strong> ${translatedOutput}</p>`;
-speakTranslatedText(translatedOutput, selectedLang.speech);
+        result.innerHTML = `<p>${translatedOutput}</p>`;
+        lastSpokenText = translatedOutput;
+
+        speakTranslatedText(translatedOutput, selectedLang.speech);
 
     } catch (error) {
         const errorMsg = `Error: ${error.message}`;
         result.innerHTML = `<p style='color:red;'>${errorMsg}</p>`;
+        lastSpokenText = errorMsg;
         speakTranslatedText(errorMsg, "en-US");
     }
 }
@@ -720,4 +714,3 @@ google.setOnLoadCallback(initTransliteration);
 </script>
 </body>
 </html>
-
