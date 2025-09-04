@@ -365,6 +365,8 @@ google.load("elements", "1", {packages: "transliteration"});
 
   <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 <script>
+alert("SEEKO AI BOT: This AI Bot is created by Harish Creations. It contains local database that can store your previous chats. But on reloading the page, all the data gets cleared up.");
+
 let conversationHistory = [];
 
 let db;
@@ -396,6 +398,15 @@ async function saveChat(userText, botResponse) {
     const tx = db.transaction("chats", "readwrite");
     const store = tx.objectStore("chats");
     store.add({ userText, botResponse, timestamp: new Date() });
+    function saveChat(userText, botResponse) {
+    return new Promise(async (resolve) => {
+        await dbReady;
+        const tx = db.transaction("chats", "readwrite");
+        const store = tx.objectStore("chats");
+        store.add({ userText, botResponse, timestamp: new Date() });
+        tx.oncomplete = () => resolve();
+    });
+}
 }
 
 // ✅ Load chats from IndexedDB on page load
@@ -404,14 +415,12 @@ async function loadChats() {
     const tx = db.transaction("chats", "readonly");
     const store = tx.objectStore("chats");
     const request = store.getAll();
-
     request.onsuccess = function () {
         const chats = request.result;
-        if (chats.length > 0) {
-            result.innerHTML = chats
-                .map(chat => `<p><strong>You:</strong> ${chat.userText}<br><strong>Bot:</strong> ${chat.botResponse}</p>`)
-                .join('');
-        }
+result.innerHTML = "";
+chats.forEach(chat => {
+    result.innerHTML += `<p><strong>You:</strong> ${chat.userText}<br><strong>Bot:</strong> ${chat.botResponse}</p>`;
+});
     };
 }
 
@@ -787,6 +796,10 @@ transliterationControl.enableTransliteration(true);
 }
 
 google.setOnLoadCallback(initTransliteration);
+
+dbReady.then(() => {
+    loadChats();
+});
 
 </script>
 </body>
