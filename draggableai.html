@@ -55,16 +55,21 @@
       draggableainameResponse.innerHTML = '<em>Thinking...</em>';
 
       try {
-        const draggableainameRes = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyC5ab-HZmvtoTEXMRBMb4-tPpwD2yMVF1A', {
+        const draggableainameRes = await fetch('https://api.openai.com/v1/chat/completions', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ contents: [ { parts: [ { text: draggableainameQuestion } ] } ] })
+          headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer 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'
+          },
+          body: JSON.stringify({
+            model: 'gpt-4o-mini',
+            messages: [{ role: 'user', content: draggableainameQuestion }]
+          })
         });
         const draggableainameData = await draggableainameRes.json();
         const draggableainameText =
-          (draggableainameData && draggableainameData.candidates && draggableainameData.candidates[0] &&
-           draggableainameData.candidates[0].content && draggableainameData.candidates[0].content.parts &&
-           draggableainameData.candidates[0].content.parts[0] && draggableainameData.candidates[0].content.parts[0].text)
+          (draggableainameData && draggableainameData.choices && draggableainameData.choices[0] &&
+           draggableainameData.choices[0].message && draggableainameData.choices[0].message.content)
            || 'No response from AI.';
         draggableainameResponse.textContent = draggableainameText;
       } catch (draggableainameErr) {
@@ -150,4 +155,5 @@
     })();
   </script>
 </div>
+
 
