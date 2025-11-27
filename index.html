@@ -5,80 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Harish's Robots & AI</title>
 <style>
-    body {
-        margin: 0;
-        padding: 0;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: linear-gradient(to right, #74ebd5, #ACB6E5);
-        height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        color: #333;
-        flex-direction: column;
-        padding: 20px;
-    }
-
-    .columno {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin-bottom: 20px;
-    }
-
-    .rowo {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 10px;
-    }
-
-    h1 {
-        font-size: 2.5em;
-        margin-bottom: 10px;
-    }
-
-    input[type="text"] {
-        padding: 10px;
-        width: 200px;
-        border-radius: 5px;
-        border: none;
-        margin-bottom: 10px;
-    }
-
-    button {
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        background-color: #6C63FF;
-        color: white;
-        font-size: 1em;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-
-    button:hover {
-        background-color: #574fd6;
-    }
-
-    #message {
-        margin-top: 20px;
-        font-size: 1.2em;
-        font-weight: bold;
-    }
-
+    body {margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(to right, #74ebd5, #ACB6E5);
+        height: 100vh; display: flex; justify-content: center; align-items: center; text-align: center; color: #333; flex-direction: column; padding: 20px;}
+    .columno { display: flex; flex-direction: column; align-items: center; margin-bottom: 20px;}
+    .rowo {display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;}
+    h1 {font-size: 2.5em; margin-bottom: 10px;}
+    input[type="text"] {padding: 10px; width: 200px; border-radius: 5px; border: none; margin-bottom: 10px;}
+    button {padding: 10px 20px; border: none; border-radius: 5px; background-color: #6C63FF; color: white; font-size: 1em; cursor: pointer; 
+            transition: background-color 0.3s ease;}
+    button:hover {background-color: #574fd6;}
+    #message {margin-top: 20px; font-size: 1.2em; font-weight: bold;}
     @media (max-width: 600px) {
-        h1 {
-            font-size: 2em;
-        }
-        input[type="text"] {
-            width: 150px;
-        }
-        button {
-            padding: 8px 16px;
-            font-size: 0.9em;
-        }
+        h1 { font-size: 2em; }
+        input[type="text"] { width: 150px; }
+        button { padding: 8px 16px; font-size: 0.9em; }
     }
 </style>
 </head>
@@ -91,7 +31,6 @@
         <button onclick="greetUser()">Say Hello</button>
         <div id="message"></div>
     </div>
-
     <div class="rowo">
         <button onclick="window.location.href='https://harish040805.github.io/ai/draggableai.html'">Draggable AI</button>
         <button onclick="window.location.href='https://harish040805.github.io/ai/seekoaivoiceassistant.html'">Seeko AI Voice Assistant</button>
@@ -99,9 +38,9 @@
         <button onclick="window.location.href='https://harish040805.github.io/ai/aibasecode.html'">AI Base Code</button>
         <button onclick="window.location.href='https://harish040805.github.io/miniharishcreationsairobot/'">Mini Harish Creations AI Robot</button>
         <button onclick="window.location.href='https://harish040805.github.io/unoharishcreationsairobot/'">UNO Harish Creations AI Robot</button>
+        <button onclick="window.location.href='https://harish040805.github.io/codexharishcreationsairobot/'">CODEX Harish Creations AI Robot</button>
         <button onclick="window.location.href='https://harish040805.github.io/datapacket/'">Snake Data Packet Robot</button>
     </div>
-
 <script>
     function greetUser() {
         const name = document.getElementById('nameInput').value.trim();
@@ -114,6 +53,7 @@
 </script>
 </body>
 </html>
+
 
 
 
