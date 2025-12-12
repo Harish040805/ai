@@ -452,7 +452,7 @@ let isPaused = false;
 let hasSubmitted = false;
 
 const translateAPIKey = "YOUR_GOOGLE_TRANSLATE_API_KEY";
-const AI_API_KEY = "AIzaSyCSE6J0lT6H2R0cRStKIP-J79lJYsItXiw";
+const AI_API_KEY = "${{ secrets.GEMINI_API_KEY }}";
 
 const langMap = {
     "English": { code: "en", speech: "en-US" },
@@ -804,5 +804,6 @@ dbReady.then(() => {
 </script>
 </body>
 </html>
+
 
 
