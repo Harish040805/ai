@@ -53,11 +53,18 @@
         return;
       }
       draggableainameResponse.innerHTML = '<em>Thinking...</em>';
+userInput.value = "";
 
-  result.innerHTML = "<p>Loading...</p>";
-    userInput.value = "";
-      try {
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${AI_API_KEY}`,
+    try {
+        const selectedLang = getSelectedLanguage();
+        const inputInEnglish = selectedLang.code === "en" ? val : await translateText(val, "en");
+
+        // ✅ Add user message to conversation history
+        conversationHistory.push({ role: "user", text: inputInEnglish });
+
+        // ✅ Include all past conversation when calling Gemini
+        const response = await fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${AI_API_KEY}`,
             {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -69,7 +76,6 @@
                 })
             }
         );
-
         const data = await response.json();
         let outputText = data?.candidates?.[0]?.content?.parts?.[0]?.text || "Error: No response from AI";
       } catch (draggableainameErr) {
@@ -155,6 +161,7 @@
     })();
   </script>
 </div>
+
 
 
 
